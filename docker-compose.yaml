@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  drf:
+    build: .
+    container_name: some-drf
+    command: >
+      bash -c "python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - ${PORT}:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15.2-alpine
+    container_name: some-postgres
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:5432
+    volumes:
+      - ./data/postgres_data:/var/lib/postgresql/data/

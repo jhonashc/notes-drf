@@ -12,16 +12,16 @@ class UserViewSet(viewsets.ModelViewSet):
     
     def list(self, request):
         try:
-            serializer = self.get_serializer(self.get_queryset(), many=True)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)            
+            user_serializer = self.get_serializer(self.get_queryset(), many=True)
+            return Response(data=user_serializer.data, status=status.HTTP_200_OK)            
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def create(self, request):
         try:
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
+            user_serializer = self.serializer_class(data=request.data)
+            if user_serializer.is_valid():
+                user_serializer.save()
                 return Response(status=status.HTTP_201_CREATED)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
@@ -31,8 +31,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         try:
             if self.get_queryset(pk):
-                serializer = self.serializer_class(self.get_queryset(pk))
-                return Response(data=serializer.data, status=status.HTTP_200_OK)
+                user_serializer = self.serializer_class(self.get_queryset(pk))
+                return Response(data=user_serializer.data, status=status.HTTP_200_OK)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
@@ -40,10 +40,10 @@ class UserViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         try:
             if self.get_queryset(pk):
-                serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(data=serializer.data, status=status.HTTP_200_OK)
+                user_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+                if user_serializer.is_valid():
+                    user_serializer.save()
+                    return Response(data=user_serializer.data, status=status.HTTP_200_OK)
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except:
@@ -52,10 +52,10 @@ class UserViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         try:
             if self.get_queryset(pk):
-                serializer = self.serializer_class(self.get_queryset(pk), data=request.data, partial=True)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(data=serializer.data, status=status.HTTP_200_OK)
+                user_serializer = self.serializer_class(self.get_queryset(pk), data=request.data, partial=True)
+                if user_serializer.is_valid():
+                    user_serializer.save()
+                    return Response(data=user_serializer.data, status=status.HTTP_200_OK)
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except:
@@ -64,10 +64,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         try:
-            user_found = self.get_queryset().filter(id=pk).first()
-            if user_found:
-                user_found.is_active = False
-                user_found.save()
+            user_serializer = self.get_queryset().filter(id=pk).first()
+            if user_serializer:
+                user_serializer.is_active = False
+                user_serializer.save()
                 return Response(status=status.HTTP_200_OK)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except:

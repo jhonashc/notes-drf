@@ -33,6 +33,7 @@ pip install -r requirements.txt
 #### Set environmet variables:
 
 ```
+PORT=
 DEBUG=
 SECRET_KEY=
 DATABASE_NAME=
@@ -42,14 +43,8 @@ DATABASE_HOST=
 DATABASE_PORT=
 ```
 
-#### Run migrations:
+#### Run docker:
 
 ```
-python manage.py migrate
-```
-
-#### Running API Server
-
-```
-python manage.py runserver
+docker-compose up -d
 ```

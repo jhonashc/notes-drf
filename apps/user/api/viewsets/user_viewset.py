@@ -1,9 +1,11 @@
 from rest_framework import status, viewsets
 from rest_framework.views import Response
+from apps.base.pagination import CustomPagination
 from apps.user.api.serializers.user_serializer import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
+    pagination_class = CustomPagination
     
     def get_queryset(self, pk=None):
         if pk is None:
@@ -12,9 +14,16 @@ class UserViewSet(viewsets.ModelViewSet):
     
     def list(self, request):
         try:
-            user_serializer = self.get_serializer(self.get_queryset(), many=True)
-            return Response(data=user_serializer.data, status=status.HTTP_200_OK)            
-        except:
+            queryset = self.filter_queryset(self.get_queryset())
+            page = self.paginate_queryset(queryset)
+            
+            if page is not None:
+                user_serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(data=user_serializer.data)
+            
+            user_serializer = self.get_serializer(queryset, many=True)
+            return self.get_paginated_response(data=user_serializer.data)
+        except Exception as e:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def create(self, request):

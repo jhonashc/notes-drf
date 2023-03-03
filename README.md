@@ -1,50 +1,13 @@
-#### Create virtual environment:
+# Dockerizing Django with Postgres
 
-Install virtualenv
+Uses the default Django development server.
 
-```
-pip install virtualenv
-```
+1. Rename .env.template to .env.
+1. Set environmet variables.
+1. Build the images and run the containers:
 
-Go to you project directory, then
+   ```sh
+   $ docker-compose up -d
+   ```
 
-```
-python -m virtualenv venv
-```
-
-Windows
-
-```
-venv\bin\activate
-```
-
-Linux/Unix
-
-```
-source venv\bin\activate
-```
-
-#### Install requirements:
-
-```
-pip install -r requirements.txt
-```
-
-#### Set environmet variables:
-
-```
-PORT=
-DEBUG=
-SECRET_KEY=
-DATABASE_NAME=
-DATABASE_USER=
-DATABASE_PASSWORD=
-DATABASE_HOST=
-DATABASE_PORT=
-```
-
-#### Run docker:
-
-```
-docker-compose up -d
-```
+   Test it out at [http://localhost:8000](http://localhost:8000)

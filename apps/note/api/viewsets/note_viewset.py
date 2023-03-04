@@ -1,17 +1,13 @@
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.views import Response
 from apps.base.mixins import PaginationHandlerMixin
 from apps.base.pagination import CustomPagination
+from apps.base.views import BaseViewSet
 from apps.note.api.serializers.note_serializer import NoteSerializer
 
-class NoteViewSet(PaginationHandlerMixin, viewsets.ModelViewSet):
+class NoteViewSet(PaginationHandlerMixin, BaseViewSet):
     serializer_class = NoteSerializer
     pagination_class = CustomPagination
-
-    def get_queryset(self, pk=None):
-        if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(status=True)
-        return self.get_serializer().Meta.model.objects.filter(id=pk, status=True).first()
 
     def list(self, request):
         try:

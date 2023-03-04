@@ -1,21 +1,17 @@
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.views import Response
 from apps.base.mixins import PaginationHandlerMixin
 from apps.base.pagination import CustomPagination
+from apps.base.views import BaseViewSet
 from apps.user.api.serializers.user_serializer import UserSerializer
 
-class UserViewSet(PaginationHandlerMixin, viewsets.ModelViewSet):
+class UserViewSet(PaginationHandlerMixin, BaseViewSet):
     serializer_class = UserSerializer
     pagination_class = CustomPagination
     
-    def get_queryset(self, pk=None):
-        if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(is_active=True)
-        return self.get_serializer().Meta.model.objects.filter(id=pk, is_active=True).first()
-    
     def list(self, request):
         try:
-            queryset = self.paginate_queryset(self.get_queryset())
+            queryset = self.paginate_queryset(self.get_queryset(is_user=True))
             user_serializer = self.get_serializer(queryset, many=True)
             return self.get_paginated_response(data=user_serializer.data)
         except:
